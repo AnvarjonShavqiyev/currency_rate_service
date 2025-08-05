@@ -13,15 +13,30 @@ export const readRates = (): Record<string, Rate> => {
 
 export const writeToFile = (data: ExchangeRateResponse) => {
   fs.readFile(DATA_PATH, 'utf-8', (err, file) => {
-    const existingData = err ? {} : JSON.parse(file);
-    const date = new Date();
-    const today = `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
+    let existingData: Record<string, Rate> = {};
+
+    if (!err) {
+      try {
+        existingData = JSON.parse(file);
+      } catch (parseError) {
+        throw parseError;
+      }
+    }
 
     const updatedData = {
       ...existingData,
-      [today]: data,
+      [getToday()]: data,
     };
 
-    fs.writeFileSync(DATA_PATH, JSON.stringify(updatedData, null, 2));
+    try {
+      fs.writeFileSync(DATA_PATH, JSON.stringify(updatedData, null, 2));
+    } catch (writeError) {
+      throw writeError;
+    }
   });
 };
+
+export const getToday = (): string => {
+  const date = new Date();
+  return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
+}
