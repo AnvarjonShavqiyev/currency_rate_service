@@ -3,3 +3,5 @@ export interface ExchangeRateResponse {
   date: string;
   rates: Record<string, number>;
 }
+
+export type Rate = Record<string, number>

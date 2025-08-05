@@ -6,7 +6,7 @@ export const startRateFetchLoop = () => {
   const fetchAndSave = async () => {
     try {
       const {data} = await axios.get(process.env.URL_PATH!);
-      writeToFile(data);
+      writeToFile(data.data);
     } catch (err) {
       console.error(err);
     }

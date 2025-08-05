@@ -1,7 +1,8 @@
 import fs from 'fs';
 import { DATA_PATH } from '../constants';
+import { ExchangeRateResponse, Rate } from '../types';
 
-export const readRates = (): Record<string, any> => {
+export const readRates = (): Record<string, Rate> => {
   try {
     const raw = fs.readFileSync(DATA_PATH, 'utf-8');
     return JSON.parse(raw);
@@ -10,7 +11,7 @@ export const readRates = (): Record<string, any> => {
   }
 };
 
-export const writeToFile = (data: any) => {
+export const writeToFile = (data: ExchangeRateResponse) => {
   fs.readFile(DATA_PATH, 'utf-8', (err, file) => {
     const existingData = err ? {} : JSON.parse(file);
     const date = new Date();
@@ -18,7 +19,7 @@ export const writeToFile = (data: any) => {
 
     const updatedData = {
       ...existingData,
-      [today]: data.data,
+      [today]: data,
     };
 
     fs.writeFileSync(DATA_PATH, JSON.stringify(updatedData, null, 2));

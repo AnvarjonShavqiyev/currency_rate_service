@@ -5,9 +5,10 @@ const router = Router();
 
 router.get('/rates', (_, res) => {
   const data = readRates();
-  const latest = Object.keys(data).sort().reverse()[0];
+  const dates = Object.keys(data)
+  const lastDate = dates[dates.length - 1]
 
-  res.json({ date: latest, rates: data[latest] });
+  res.json({ date: lastDate, rates: data[lastDate] });
 });
 
 router.get('/rates/:date', (req, res) => {
