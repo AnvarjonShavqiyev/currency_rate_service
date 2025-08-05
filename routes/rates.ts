@@ -7,8 +7,6 @@ router.get('/rates', (_, res) => {
   const data = readRates();
   const latest = Object.keys(data).sort().reverse()[0];
 
-  if (!latest) return res.status(404).json({ error: 'No data yet' });
-
   res.json({ date: latest, rates: data[latest] });
 });
 

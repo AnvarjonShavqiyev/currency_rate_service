@@ -5,8 +5,8 @@ export const readRates = (): Record<string, any> => {
   try {
     const raw = fs.readFileSync(DATA_PATH, 'utf-8');
     return JSON.parse(raw);
-  } catch {
-    return {};
+  } catch(error) {
+    throw error;
   }
 };
 
