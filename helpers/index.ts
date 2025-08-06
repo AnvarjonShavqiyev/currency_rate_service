@@ -1,10 +1,10 @@
 import fs from 'fs';
-import { DATA_PATH } from '../constants';
+import { DATA_PATH, JSON_FORMAT, MILISECOND, MINUTE, ONE, TWO, ZERO_STRING } from '../constants';
 import { ExchangeRateResponse, Rate } from '../types';
 
 export const readRates = (): Record<string, Rate> => {
   try {
-    const raw = fs.readFileSync(DATA_PATH, 'utf-8');
+    const raw = fs.readFileSync(DATA_PATH, JSON_FORMAT);
     return JSON.parse(raw);
   } catch(error) {
     throw error;
@@ -12,7 +12,7 @@ export const readRates = (): Record<string, Rate> => {
 };
 
 export const writeToFile = (data: ExchangeRateResponse) => {
-  fs.readFile(DATA_PATH, 'utf-8', (err, file) => {
+  fs.readFile(DATA_PATH, JSON_FORMAT, (err, file) => {
     let existingData: Record<string, Rate> = {};
 
     if (!err) {
@@ -29,7 +29,7 @@ export const writeToFile = (data: ExchangeRateResponse) => {
     };
 
     try {
-      fs.writeFileSync(DATA_PATH, JSON.stringify(updatedData, null, 2));
+      fs.writeFileSync(DATA_PATH, JSON.stringify(updatedData, null, TWO));
     } catch (writeError) {
       throw writeError;
     }
@@ -38,5 +38,9 @@ export const writeToFile = (data: ExchangeRateResponse) => {
 
 export const getToday = (): string => {
   const date = new Date();
-  return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
+  return `${String(date.getDate()).padStart(TWO, ZERO_STRING)}.${String(date.getMonth() + ONE).padStart(TWO, ZERO_STRING)}.${date.getFullYear()}`;
+}
+
+export const convertToMiliSeconds = (minutes: number) => {
+  return minutes * MINUTE * MILISECOND;
 }

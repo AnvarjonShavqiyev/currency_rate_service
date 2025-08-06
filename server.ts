@@ -1,10 +1,9 @@
 import express from "express";
-import { startRateFetchLoop } from "./services/fetchRates";
 import ratesRouter from './routes/rates';
 import dotenv from 'dotenv';
+import { PORT } from "./constants";
 
 const app = express();
-const PORT = 3000;
 
 
 dotenv.config()
@@ -15,7 +14,6 @@ app.get("/", (_, res) => {
 });
 
 app.use(ratesRouter);
-startRateFetchLoop();
 
 app.listen(PORT, () => {
     console.log(`Port is running on http://localhost:${PORT}`)
